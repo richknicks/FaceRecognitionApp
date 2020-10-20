@@ -1,18 +1,26 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import "./FaceRecognition.css";
 
-const useStyles = makeStyles({
-  imgStyle: {
-    margin: "auto",
-    marginTop: "1.5em",
-  },
-});
-const FaceRecognition = ({ imageUrl }) => {
-  const classes = useStyles();
+const FaceRecognition = ({ imageUrl, box }) => {
   return (
-    <div className="container">
-      <div className={classes.imgStyle}>
-        <img src={imageUrl} alt="" width="500px" height="auto" />
+    <div className="faceContainer">
+      <div className="imageStyle">
+        <img
+          id="inputimage"
+          src={imageUrl}
+          alt=""
+          width="500px"
+          height="auto"
+        />
+        <div
+          className="bounding-box"
+          style={{
+            top: box.topRow,
+            right: box.rightCol,
+            bottom: box.bottomRow,
+            left: box.leftCol,
+          }}
+        ></div>
       </div>
     </div>
   );

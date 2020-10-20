@@ -32,7 +32,7 @@ const ImageLinkForm = ({ onInputChange, onButtonSubmit }) => {
   return (
     <div className="container">
       <Typography variant="h5">
-        "The Face Recognition program will detect faces in your pictures. Give
+        "The Face Recognition program will detect faces in your jpg images. Give
         it a try!"
       </Typography>
       <div className="inputBox">
