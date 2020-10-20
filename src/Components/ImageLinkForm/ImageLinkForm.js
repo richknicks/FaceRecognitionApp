@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ImageLinkForm = () => {
+const ImageLinkForm = ({ onInputChange, onButtonSubmit }) => {
   const classes = useStyles();
   return (
     <div className="container">
@@ -38,12 +38,18 @@ const ImageLinkForm = () => {
       <div className="inputBox">
         <form className={classes.root} noValidate autoComplete="off">
           <TextField
+            onChange={onInputChange}
             id="outlined-basic"
             label="Enter Image File"
             variant="outlined"
           />
         </form>
-        <Button className={classes.btn} variant="contained" color="secondary">
+        <Button
+          className={classes.btn}
+          variant="contained"
+          color="secondary"
+          onClick={onButtonSubmit}
+        >
           Detect
         </Button>
       </div>

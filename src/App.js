@@ -1,10 +1,15 @@
 import React, { Component } from "react";
 import Navigation from "./Components/Navigation/Navigation";
+import Clarifai from "clarifai";
 import Logo from "./Components/Logo/Logo";
 import ImageLinkForm from "./Components/ImageLinkForm/ImageLinkForm";
 import Rank from "./Components/Rank/Rank";
 import Particles from "react-tsparticles";
 import "./App.css";
+
+const app = new Clarifai.App({
+  apiKey: "80f4141be0554cd19497116e8d784e83",
+});
 
 const particlesOptions = {
   background: {
@@ -86,6 +91,32 @@ const particlesOptions = {
 };
 
 class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      input: "",
+    };
+  }
+  onInputChange = (event) => {
+    console.log(event.target.value);
+  };
+  onButtonSubmit = () => {
+    console.log("click");
+
+    app.models
+      .predict(
+        Clarifai.FACE_DETECT_MODEL,
+        "https://www.facebeautyscience.com/wp-content/uploads/2020/04/face-beauty-skin-face2-proc.jpg"
+      )
+      .then(
+        function (response) {
+          console.log(response);
+        },
+        function (err) {
+          // there was an error
+        }
+      );
+  };
   render() {
     return (
       <div className="App">
@@ -97,7 +128,10 @@ class App extends Component {
         <Navigation />
         <Logo />
         <Rank />
-        <ImageLinkForm />
+        <ImageLinkForm
+          onInputChange={this.onInputChange}
+          onButtonSubmit={this.onButtonSubmit}
+        />
         {/* <FaceRecognition/> */}
       </div>
     );
