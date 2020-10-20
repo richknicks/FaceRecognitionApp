@@ -4,6 +4,7 @@ import Clarifai from "clarifai";
 import Logo from "./Components/Logo/Logo";
 import ImageLinkForm from "./Components/ImageLinkForm/ImageLinkForm";
 import Rank from "./Components/Rank/Rank";
+import FaceRecognition from "./Components/FaceRecognition/FaceRecognition";
 import Particles from "react-tsparticles";
 import "./App.css";
 
@@ -95,27 +96,41 @@ class App extends Component {
     super();
     this.state = {
       input: "",
+      imageUrl: "",
+      box: {},
     };
   }
+  calculateFaceLocation = (data) => {
+    const clarifaiFace =
+      data.outputs[0].data.regions[0].region_info.bounding_box;
+    const image = document.getElementById("inputimage");
+    const width = Number(image.width);
+    const height = Number(image.height);
+    return {
+      leftCol: clarifaiFace.left_col * width,
+      topRow: clarifaiFace.top_row * height,
+      rightCol: width - clarifaiFace.right_col * width,
+      bottomRow: height - clarifaiFace.bottom_row * height,
+    };
+  };
+  displayFaceBox = (box) => {
+    console.log(box);
+    this.setState({ box: box });
+  };
   onInputChange = (event) => {
-    console.log(event.target.value);
+    this.setState({ input: event.target.value });
   };
   onButtonSubmit = () => {
-    console.log("click");
+    this.setState({ imageUrl: this.state.input });
 
     app.models
-      .predict(
-        Clarifai.FACE_DETECT_MODEL,
-        "https://www.facebeautyscience.com/wp-content/uploads/2020/04/face-beauty-skin-face2-proc.jpg"
-      )
-      .then(
-        function (response) {
-          console.log(response);
-        },
-        function (err) {
-          // there was an error
-        }
-      );
+      .predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
+      .then((response) => {
+        this.displayFaceBox(this.calculateFaceLocation(response));
+      })
+      .catch((error) => {
+        console.log("This is an api error", error);
+      });
   };
   render() {
     return (
@@ -132,7 +147,7 @@ class App extends Component {
           onInputChange={this.onInputChange}
           onButtonSubmit={this.onButtonSubmit}
         />
-        {/* <FaceRecognition/> */}
+        <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl} />
       </div>
     );
   }
