@@ -109,7 +109,7 @@ export default function SignIn({ onRouteChange }) {
                 label="Remember me"
               />
               <Button
-                onClick={() => onRouteChange("home")}
+                onClick={() => onRouteChange("Home")}
                 type="submit"
                 fullWidth
                 variant="contained"
@@ -125,7 +125,11 @@ export default function SignIn({ onRouteChange }) {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <Link
+                    href="#"
+                    variant="body2"
+                    onClick={() => onRouteChange("Register")}
+                  >
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
