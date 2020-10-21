@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: "5px 10px",
     border: "2px solid black",
     minWidth: 275,
-    marginTop: "20px",
+    marginTop: "64px",
   },
   avatar: {
     margin: theme.spacing(1),
@@ -70,7 +70,7 @@ export default function SignIn({ onRouteChange }) {
         <CardContent>
           <CssBaseline />
           <div className={classes.paper}>
-            <img src={face} width="80px" height="auto" alt="" />
+            <img src={face} width="80px" height="auto" alt="Logo" />
 
             <Typography
               component="h1"
@@ -90,7 +90,6 @@ export default function SignIn({ onRouteChange }) {
                 name="email"
                 autoComplete="email"
                 autoFocus
-                style={{ border: "2px solid black" }}
               />
               <TextField
                 variant="outlined"
@@ -102,7 +101,6 @@ export default function SignIn({ onRouteChange }) {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                style={{ border: "2px solid black" }}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
@@ -136,11 +134,11 @@ export default function SignIn({ onRouteChange }) {
               </Grid>
             </form>
           </div>
-          <Box mt={8}>
-            <Copyright />
-          </Box>
         </CardContent>
       </Card>
+      <Box mt={8}>
+        <Copyright />
+      </Box>
     </Container>
   );
 }

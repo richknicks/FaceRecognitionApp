@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Navigation = ({ onRouteChange }) => {
+const Navigation = ({ onRouteChange, isSignedIn }) => {
   const classes = useStyles();
 
   return (
@@ -27,9 +27,20 @@ const Navigation = ({ onRouteChange }) => {
           <Typography variant="h6" className={classes.title} align="center">
             Find Faces
           </Typography>
-          <Button onClick={() => onRouteChange("SignIn")} color="inherit">
-            Sign Out
-          </Button>
+          {isSignedIn ? (
+            <Button onClick={() => onRouteChange("SignIn")} color="inherit">
+              Sign Out
+            </Button>
+          ) : (
+            <div>
+              <Button onClick={() => onRouteChange("SignIn")} color="inherit">
+                Sign In
+              </Button>
+              <Button onClick={() => onRouteChange("Register")} color="inherit">
+                Register
+              </Button>
+            </div>
+          )}
         </Toolbar>
       </AppBar>
     </div>
