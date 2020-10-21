@@ -111,6 +111,7 @@ export default function SignUp({ onRouteChange }) {
             </Grid>
           </Grid>
           <Button
+            onClick={() => onRouteChange("Home")}
             type="submit"
             fullWidth
             variant="contained"

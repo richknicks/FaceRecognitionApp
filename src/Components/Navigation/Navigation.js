@@ -28,7 +28,7 @@ const Navigation = ({ onRouteChange, isSignedIn }) => {
             Find Faces
           </Typography>
           {isSignedIn ? (
-            <Button onClick={() => onRouteChange("SignIn")} color="inherit">
+            <Button onClick={() => onRouteChange("SignOut")} color="inherit">
               Sign Out
             </Button>
           ) : (
