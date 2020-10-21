@@ -4,6 +4,7 @@ import Clarifai from "clarifai";
 import Logo from "./Components/Logo/Logo";
 import ImageLinkForm from "./Components/ImageLinkForm/ImageLinkForm";
 import Rank from "./Components/Rank/Rank";
+import SignIn from "./Components/SignIn/SignIn";
 import FaceRecognition from "./Components/FaceRecognition/FaceRecognition";
 import Particles from "react-tsparticles";
 import "./App.css";
@@ -98,6 +99,7 @@ class App extends Component {
       input: "",
       imageUrl: "",
       box: {},
+      route: "SignIn",
     };
   }
   calculateFaceLocation = (data) => {
@@ -132,6 +134,9 @@ class App extends Component {
         console.log("This is an api error", error);
       });
   };
+  onRouteChange = (route) => {
+    this.setState({ route: route });
+  };
   render() {
     return (
       <div className="App">
@@ -140,14 +145,23 @@ class App extends Component {
           id="tsparticles"
           options={particlesOptions}
         />
-        <Navigation />
-        <Logo />
-        <Rank />
-        <ImageLinkForm
-          onInputChange={this.onInputChange}
-          onButtonSubmit={this.onButtonSubmit}
-        />
-        <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl} />
+        <Navigation onRouteChange={this.onRouteChange} />
+        {this.state.route === "SignIn" ? (
+          <SignIn onRouteChange={this.onRouteChange} />
+        ) : (
+          <div>
+            <Logo />
+            <Rank />
+            <ImageLinkForm
+              onInputChange={this.onInputChange}
+              onButtonSubmit={this.onButtonSubmit}
+            />
+            <FaceRecognition
+              box={this.state.box}
+              imageUrl={this.state.imageUrl}
+            />
+          </div>
+        )}
       </div>
     );
   }

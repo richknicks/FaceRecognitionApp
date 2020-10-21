@@ -16,3 +16,8 @@
   align-items: center;
   padding-top: 3.5rem;
 }
+.tiltBox {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}

@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn() {
+export default function SignIn({ onRouteChange }) {
   const classes = useStyles();
 
   return (
@@ -107,6 +107,7 @@ export default function SignIn() {
                 label="Remember me"
               />
               <Button
+                onClick={() => onRouteChange("home")}
                 type="submit"
                 fullWidth
                 variant="contained"
