@@ -118,7 +118,7 @@ class App extends Component {
     };
   };
   displayFaceBox = (box) => {
-    console.log(box);
+    console.log("Box Dimensions", box);
     this.setState({ box: box });
   };
   onInputChange = (event) => {
@@ -131,6 +131,7 @@ class App extends Component {
       .predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
       .then((response) => {
         this.displayFaceBox(this.calculateFaceLocation(response));
+        console.log("Model Response", response);
       })
       .catch((error) => {
         console.log("This is an api error", error);

@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    paddingLeft: "135px",
   },
 }));
 
@@ -24,8 +25,8 @@ const Navigation = ({ onRouteChange, isSignedIn }) => {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" className={classes.title} align="center">
-            Find Faces
+          <Typography variant="h6" className={classes.title}>
+            Face Finder
           </Typography>
           {isSignedIn ? (
             <Button onClick={() => onRouteChange("SignOut")} color="inherit">
