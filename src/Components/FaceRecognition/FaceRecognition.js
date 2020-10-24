@@ -1,5 +1,7 @@
 import React from "react";
+import DrawBoxes from "../DrawBoxes/DrawBoxes";
 import "./FaceRecognition.css";
+import cuid from "cuid";
 
 const FaceRecognition = ({ imageUrl, box }) => {
   return (
@@ -12,15 +14,9 @@ const FaceRecognition = ({ imageUrl, box }) => {
           width="500px"
           height="auto"
         />
-        <div
-          className="bounding-box"
-          style={{
-            top: box.topRow,
-            right: box.rightCol,
-            bottom: box.bottomRow,
-            left: box.leftCol,
-          }}
-        ></div>
+        {box.map((box, i) => (
+          <DrawBoxes boundings={box} key={cuid()} />
+        ))}
       </div>
     </div>
   );

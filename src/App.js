@@ -99,27 +99,41 @@ class App extends Component {
     this.state = {
       input: "",
       imageUrl: "",
-      box: {},
+      box: [],
       route: "SignIn",
       isSignedIn: false,
     };
   }
   calculateFaceLocation = (data) => {
-    const clarifaiFace =
-      data.outputs[0].data.regions[0].region_info.bounding_box;
     const image = document.getElementById("inputimage");
     const width = Number(image.width);
     const height = Number(image.height);
-    return {
-      leftCol: clarifaiFace.left_col * width,
-      topRow: clarifaiFace.top_row * height,
-      rightCol: width - clarifaiFace.right_col * width,
-      bottomRow: height - clarifaiFace.bottom_row * height,
-    };
+
+    let arr = [];
+
+    for (let i in data.outputs[0].data.regions) {
+      if (
+        `region_info` in data.outputs[0].data.regions[i] &&
+        `bounding_box` in data.outputs[0].data.regions[i].region_info
+      ) {
+        let boundingBox =
+          data.outputs[0].data.regions[i].region_info.bounding_box; //just make calling this simplier
+        let obj = {
+          leftCol: boundingBox.left_col * width,
+          topRow: boundingBox.top_row * height,
+          rightCol: width - boundingBox.right_col * width,
+          bottomRow: height - boundingBox.bottom_row * height,
+        };
+        arr.push(obj);
+      }
+    }
+
+    return arr;
   };
-  displayFaceBox = (box) => {
-    console.log("Box Dimensions", box);
-    this.setState({ box: box });
+
+  displayFaceBox = (arr) => {
+    console.log("Box Dimensions", arr);
+    this.setState({ box: arr });
   };
   onInputChange = (event) => {
     this.setState({ input: event.target.value });
