@@ -104,6 +104,7 @@ class App extends Component {
       isSignedIn: false,
     };
   }
+
   calculateFaceLocation = (data) => {
     const image = document.getElementById("inputimage");
     const width = Number(image.width);
@@ -159,6 +160,7 @@ class App extends Component {
     }
     this.setState({ route: route });
   };
+
   render() {
     return (
       <div className="App">

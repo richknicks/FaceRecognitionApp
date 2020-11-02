@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
@@ -61,8 +61,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn({ onRouteChange }) {
+const SignIn = ({ onRouteChange }) => {
   const classes = useStyles();
+  const [signinEmail, setSigninEmail] = useState("");
+  const [signinPassword, setSigninPassword] = useState("");
+
+  const onEmailChange = (event) => {
+    setSigninEmail(event.target.value);
+  };
+  const onPasswordChange = (event) => {
+    setSigninPassword(event.target.value);
+  };
+  const onSubmitSignin = () => {
+    fetch("http://localhost:5000/signin", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: signinEmail,
+        password: signinPassword,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data === "success") {
+          onRouteChange("Home");
+        }
+      });
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -81,6 +106,7 @@ export default function SignIn({ onRouteChange }) {
             </Typography>
             <form className={classes.form} noValidate>
               <TextField
+                onChange={onEmailChange}
                 variant="outlined"
                 margin="normal"
                 required
@@ -92,6 +118,7 @@ export default function SignIn({ onRouteChange }) {
                 autoFocus
               />
               <TextField
+                onChange={onPasswordChange}
                 variant="outlined"
                 margin="normal"
                 required
@@ -107,7 +134,7 @@ export default function SignIn({ onRouteChange }) {
                 label="Remember me"
               />
               <Button
-                onClick={() => onRouteChange("Home")}
+                onClick={onSubmitSignin}
                 type="submit"
                 fullWidth
                 variant="contained"
@@ -141,4 +168,6 @@ export default function SignIn({ onRouteChange }) {
       </Box>
     </Container>
   );
-}
+};
+
+export default SignIn;
