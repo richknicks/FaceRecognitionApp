@@ -7,17 +7,17 @@ const useStyles = makeStyles({
     color: "blue",
   },
 });
-const Rank = () => {
+const Rank = ({ name, entries }) => {
   const classes = useStyles();
   return (
     <div className="container">
       <div>
         <Typography variant="h5" className={classes.textStyle}>
-          Richard your current Rank is ...
+          {`${name}, your current entry count is ...`}
         </Typography>
       </div>
       <div>
-        <Typography variant="h4">"#5"</Typography>
+        <Typography variant="h4">{entries}</Typography>
       </div>
     </div>
   );

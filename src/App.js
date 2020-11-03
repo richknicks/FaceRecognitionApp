@@ -104,7 +104,8 @@ class App extends Component {
       isSignedIn: false,
       user: {
         id: "",
-        name: "",
+        firstName: "",
+        lastName: "",
         email: "",
         entries: 0,
         joined: "",
@@ -116,7 +117,8 @@ class App extends Component {
     this.setState({
       user: {
         id: data.id,
-        name: data.name,
+        firstName: data.firstName,
+        lastName: data.lastName,
         email: data.email,
         entries: data.entries,
         joined: data.joined,
@@ -164,8 +166,20 @@ class App extends Component {
     app.models
       .predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
       .then((response) => {
+        if (response) {
+          fetch("http://localhost:5000/image", {
+            method: "put",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              id: this.state.user.id,
+            }),
+          })
+            .then((response) => response.json())
+            .then((count) => {
+              this.setState(Object.assign(this.state.user, { entries: count }));
+            });
+        }
         this.displayFaceBox(this.calculateFaceLocation(response));
-        console.log("Model Response", response);
       })
       .catch((error) => {
         console.log("This is an api error", error);
@@ -195,7 +209,10 @@ class App extends Component {
         {this.state.route === "Home" ? (
           <div>
             <Logo />
-            <Rank />
+            <Rank
+              name={this.state.user.firstName}
+              entries={this.state.user.entries}
+            />
             <ImageLinkForm
               onInputChange={this.onInputChange}
               onButtonSubmit={this.onButtonSubmit}
@@ -206,7 +223,7 @@ class App extends Component {
             />
           </div>
         ) : this.state.route === "SignIn" ? (
-          <SignIn onRouteChange={this.onRouteChange} />
+          <SignIn loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
         ) : (
           <Register
             loadUser={this.loadUser}
