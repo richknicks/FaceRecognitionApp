@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -45,6 +45,42 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp({ onRouteChange }) {
   const classes = useStyles();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+
+  const onFirstNameChange = (event) => {
+    setFirstName(event.target.value);
+  };
+  const onLastNameChange = (event) => {
+    setLastName(event.target.value);
+  };
+  const onEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+  const onPasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+  const onSubmitSignin = ({ loadUser }) => {
+    fetch("http://localhost:5000/register", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+        firstName: firstName,
+        lastName: lastName,
+      }),
+    })
+      .then((response) => response.json())
+      .then((user) => {
+        if (user) {
+          loadUser(user);
+          onRouteChange("Home");
+        }
+      });
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -58,6 +94,7 @@ export default function SignUp({ onRouteChange }) {
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
+                onChange={onFirstNameChange}
                 autoComplete="fname"
                 name="firstName"
                 variant="outlined"
@@ -70,6 +107,7 @@ export default function SignUp({ onRouteChange }) {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                onChange={onLastNameChange}
                 variant="outlined"
                 required
                 fullWidth
@@ -81,6 +119,7 @@ export default function SignUp({ onRouteChange }) {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                onChange={onEmailChange}
                 variant="outlined"
                 required
                 fullWidth
@@ -92,6 +131,7 @@ export default function SignUp({ onRouteChange }) {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                onChange={onPasswordChange}
                 variant="outlined"
                 required
                 fullWidth
@@ -110,7 +150,7 @@ export default function SignUp({ onRouteChange }) {
             </Grid>
           </Grid>
           <Button
-            onClick={() => onRouteChange("Home")}
+            onClick={onSubmitSignin}
             type="submit"
             fullWidth
             variant="contained"
