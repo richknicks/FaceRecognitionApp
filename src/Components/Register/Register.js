@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -43,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignUp({ onRouteChange }) {
+const SignUp = ({ onRouteChange, loadUser }) => {
   const classes = useStyles();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -62,7 +60,7 @@ export default function SignUp({ onRouteChange }) {
   const onPasswordChange = (event) => {
     setPassword(event.target.value);
   };
-  const onSubmitSignin = ({ loadUser }) => {
+  const onSubmitSignin = () => {
     fetch("http://localhost:5000/register", {
       method: "post",
       headers: { "Content-Type": "application/json" },
@@ -142,12 +140,6 @@ export default function SignUp({ onRouteChange }) {
                 autoComplete="current-password"
               />
             </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              />
-            </Grid>
           </Grid>
           <Button
             onClick={onSubmitSignin}
@@ -159,7 +151,7 @@ export default function SignUp({ onRouteChange }) {
           >
             Sign Up
           </Button>
-          <Grid container justify="flex-end">
+          <Grid container justify="center">
             <Grid item>
               <Link
                 href="#"
@@ -177,4 +169,6 @@ export default function SignUp({ onRouteChange }) {
       </Box>
     </Container>
   );
-}
+};
+
+export default SignUp;
