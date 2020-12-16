@@ -4,13 +4,14 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-
+import { Link } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
+  navButton: {
+    color: "white",
+    textDecoration: "none",
   },
   title: {
     flexGrow: 1,
@@ -29,15 +30,20 @@ const Navigation = ({ onRouteChange, isSignedIn }) => {
             Face Finder
           </Typography>
           {isSignedIn ? (
-            <Button onClick={() => onRouteChange("SignOut")} color="inherit">
+            <Button component={Link} to={"/"} className={classes.navButton}>
               Sign Out
             </Button>
           ) : (
             <div>
-              <Button onClick={() => onRouteChange("SignIn")} color="inherit">
+              <Button component={Link} to={"/"} className={classes.navButton}>
                 Sign In
               </Button>
-              <Button onClick={() => onRouteChange("Register")} color="inherit">
+
+              <Button
+                component={Link}
+                to={"/register"}
+                className={classes.navButton}
+              >
                 Register
               </Button>
             </div>

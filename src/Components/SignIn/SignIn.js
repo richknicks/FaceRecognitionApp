@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
@@ -11,14 +10,14 @@ import Container from "@material-ui/core/Container";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import face from "../Logo/faceRecLogo.png";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Face Recognition App
-      </Link>{" "}
+      <Button href="https://material-ui.com/">Face Recognition App</Button>{" "}
       {new Date().getFullYear()}
       {"."}
     </Typography>
@@ -50,6 +49,9 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  navButton: {
+    color: "blue",
+  },
 
   title: {
     fontSize: 14,
@@ -59,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignIn = ({ onRouteChange, loadUser }) => {
+const SignIn = ({ history, loadUser }) => {
   const classes = useStyles();
   const [signinEmail, setSigninEmail] = useState("");
   const [signinPassword, setSigninPassword] = useState("");
@@ -70,21 +72,37 @@ const SignIn = ({ onRouteChange, loadUser }) => {
   const onPasswordChange = (event) => {
     setSigninPassword(event.target.value);
   };
-  const onSubmitSignin = () => {
-    fetch("http://localhost:5000/signin", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+  const onSubmitSignin = (event) => {
+    // fetch("http://localhost:5000/signin", {
+    //   method: "post",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({
+    //     email: signinEmail,
+    //     password: signinPassword,
+    //   }),
+    // })
+    //   .then((response) => response.json())
+    //   .then((user) => {
+    //     if (user.id) {
+    //       loadUser(user);
+    //       onRouteChange("Home");
+    //     }
+    //   });
+    event.preventDefault();
+
+    axios
+      .post("http://localhost:5000/signin", {
         email: signinEmail,
         password: signinPassword,
-      }),
-    })
-      .then((response) => response.json())
+      })
       .then((user) => {
         if (user.id) {
           loadUser(user);
-          onRouteChange("Home");
+          history.push("/home");
         }
+      })
+      .catch(function (error) {
+        console.log(error);
       });
   };
 
@@ -103,7 +121,7 @@ const SignIn = ({ onRouteChange, loadUser }) => {
             >
               Sign In
             </Typography>
-            <form className={classes.form} noValidate>
+            <form className={classes.form} noValidate onSubmit={onSubmitSignin}>
               <TextField
                 onChange={onEmailChange}
                 variant="outlined"
@@ -130,7 +148,7 @@ const SignIn = ({ onRouteChange, loadUser }) => {
               />
 
               <Button
-                onClick={onSubmitSignin}
+                // onClick={onSubmitSignin}
                 type="submit"
                 fullWidth
                 variant="contained"
@@ -141,13 +159,16 @@ const SignIn = ({ onRouteChange, loadUser }) => {
               </Button>
               <Grid container justify="center">
                 <Grid item>
-                  <Link
-                    href="#"
-                    variant="body2"
-                    onClick={() => onRouteChange("Register")}
+                  <Button
+                    className={classes.navButton}
+                    component={Link}
+                    to={"/register"}
+                    variant="outlined"
+                    color="primary"
+                    href="#outlined-buttons"
                   >
-                    {"Don't have an account? Sign Up"}
-                  </Link>
+                    {"Don't have an account? Register"}
+                  </Button>
                 </Grid>
               </Grid>
             </form>

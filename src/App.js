@@ -8,7 +8,9 @@ import SignIn from "./Components/SignIn/SignIn";
 import Register from "./Components/Register/Register";
 import FaceRecognition from "./Components/FaceRecognition/FaceRecognition";
 import Particles from "react-tsparticles";
+import InvalidPath from "./Components/InvalidPath/InvalidPath";
 import "./App.css";
+import { Route, Switch } from "react-router-dom";
 
 const app = new Clarifai.App({
   apiKey: "80f4141be0554cd19497116e8d784e83",
@@ -100,7 +102,7 @@ class App extends Component {
       input: "",
       imageUrl: "",
       box: [],
-      route: "SignIn",
+      route: "/",
       isSignedIn: false,
       user: {
         id: "",
@@ -186,9 +188,9 @@ class App extends Component {
       });
   };
   onRouteChange = (route) => {
-    if (route === "SignOut") {
+    if (route === "signout") {
       this.setState({ isSignedIn: false });
-    } else if (route === "Home") {
+    } else if (route === "home") {
       this.setState({ isSignedIn: true });
     }
     this.setState({ route: route });
@@ -206,8 +208,8 @@ class App extends Component {
           isSignedIn={this.state.isSignedIn}
           onRouteChange={this.onRouteChange}
         />
-        {this.state.route === "Home" ? (
-          <div>
+        <Switch>
+          <Route path="/home">
             <Logo />
             <Rank
               name={this.state.user.firstName}
@@ -221,18 +223,26 @@ class App extends Component {
               box={this.state.box}
               imageUrl={this.state.imageUrl}
             />
-          </div>
-        ) : this.state.route === "SignIn" ? (
-          <SignIn loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
-        ) : (
-          <Register
-            loadUser={this.loadUser}
-            onRouteChange={this.onRouteChange}
-          />
-        )}
+          </Route>
+
+          <Route exact path="/">
+            <SignIn
+              loadUser={this.loadUser}
+              onRouteChange={this.onRouteChange}
+            />
+          </Route>
+
+          <Route path="/register">
+            <Register
+              loadUser={this.loadUser}
+              onRouteChange={this.onRouteChange}
+            />
+          </Route>
+
+          <Route component={InvalidPath} />
+        </Switch>
       </div>
     );
   }
 }
-
 export default App;
