@@ -10,6 +10,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { Link } from "react-router-dom";
 import face from "../Logo/faceRecLogo.png";
 import axios from "axios";
+import { withRouter } from "react-router-dom";
 
 function Copyright() {
   return (
@@ -44,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignUp = ({ onRouteChange, loadUser }) => {
+const SignUp = ({ history, loadUser, setSignIn }) => {
   const classes = useStyles();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -64,23 +65,6 @@ const SignUp = ({ onRouteChange, loadUser }) => {
     setPassword(event.target.value);
   };
   const onSubmitSignin = () => {
-    // fetch("http://localhost:5000/register", {
-    //   method: "post",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({
-    //     email: email,
-    //     password: password,
-    //     firstName: firstName,
-    //     lastName: lastName,
-    //   }),
-    // })
-    //   .then((response) => response.json())
-    //   .then((user) => {
-    //     if (user) {
-    //       loadUser(user);
-    //       onRouteChange("/home");
-    //     }
-    //   });
     axios
       .post("http://localhost:5000/register", {
         email: email,
@@ -88,12 +72,10 @@ const SignUp = ({ onRouteChange, loadUser }) => {
         firstName: firstName,
         lastName: lastName,
       })
-      .then((user) => {
-        if (user) {
-          loadUser(user);
-          console.log("user loaded", user);
-          onRouteChange("home");
-        }
+      .then((response) => {
+        loadUser(response.data);
+        history.push("/home");
+        setSignIn();
       })
       .catch(function (error) {
         console.log(error);
@@ -163,7 +145,7 @@ const SignUp = ({ onRouteChange, loadUser }) => {
           </Grid>
           <Button
             onClick={onSubmitSignin}
-            type="submit"
+            type="button"
             fullWidth
             variant="contained"
             color="primary"
@@ -195,4 +177,4 @@ const SignUp = ({ onRouteChange, loadUser }) => {
   );
 };
 
-export default SignUp;
+export default withRouter(SignUp);

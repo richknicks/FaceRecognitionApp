@@ -12,6 +12,7 @@ import CardContent from "@material-ui/core/CardContent";
 import face from "../Logo/faceRecLogo.png";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { withRouter } from "react-router-dom";
 
 function Copyright() {
   return (
@@ -61,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignIn = ({ history, loadUser }) => {
+const SignIn = ({ history, loadUser, setSignIn }) => {
   const classes = useStyles();
   const [signinEmail, setSigninEmail] = useState("");
   const [signinPassword, setSigninPassword] = useState("");
@@ -72,35 +73,18 @@ const SignIn = ({ history, loadUser }) => {
   const onPasswordChange = (event) => {
     setSigninPassword(event.target.value);
   };
-  const onSubmitSignin = (event) => {
-    // fetch("http://localhost:5000/signin", {
-    //   method: "post",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({
-    //     email: signinEmail,
-    //     password: signinPassword,
-    //   }),
-    // })
-    //   .then((response) => response.json())
-    //   .then((user) => {
-    //     if (user.id) {
-    //       loadUser(user);
-    //       onRouteChange("Home");
-    //     }
-    //   });
-    event.preventDefault();
-
+  const onSubmitSignin = () => {
     axios
       .post("http://localhost:5000/signin", {
         email: signinEmail,
         password: signinPassword,
       })
-      .then((user) => {
-        if (user.id) {
-          loadUser(user);
-          history.push("/home");
-        }
+      .then((response) => {
+        loadUser(response.data);
+        history.push("/home");
+        setSignIn();
       })
+
       .catch(function (error) {
         console.log(error);
       });
@@ -148,8 +132,8 @@ const SignIn = ({ history, loadUser }) => {
               />
 
               <Button
-                // onClick={onSubmitSignin}
-                type="submit"
+                type="button"
+                onClick={onSubmitSignin}
                 fullWidth
                 variant="contained"
                 color="primary"
@@ -182,4 +166,4 @@ const SignIn = ({ history, loadUser }) => {
   );
 };
 
-export default SignIn;
+export default withRouter(SignIn);

@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Navigation = ({ onRouteChange, isSignedIn }) => {
+const Navigation = ({ setSignOut, isSignedIn }) => {
   const classes = useStyles();
 
   return (
@@ -30,7 +30,12 @@ const Navigation = ({ onRouteChange, isSignedIn }) => {
             Face Finder
           </Typography>
           {isSignedIn ? (
-            <Button component={Link} to={"/"} className={classes.navButton}>
+            <Button
+              component={Link}
+              to={"/"}
+              className={classes.navButton}
+              onClick={setSignOut}
+            >
               Sign Out
             </Button>
           ) : (

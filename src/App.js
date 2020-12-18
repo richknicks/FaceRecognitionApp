@@ -11,6 +11,7 @@ import Particles from "react-tsparticles";
 import InvalidPath from "./Components/InvalidPath/InvalidPath";
 import "./App.css";
 import { Route, Switch } from "react-router-dom";
+import PrivateRoute from "./Components/Routes/PrivateRoute";
 
 const app = new Clarifai.App({
   apiKey: "80f4141be0554cd19497116e8d784e83",
@@ -54,10 +55,10 @@ const particlesOptions = {
   },
   particles: {
     color: {
-      value: "#ffffff",
+      value: "#050505",
     },
     links: {
-      color: "#ffffff",
+      color: "#0b57ba",
       distance: 150,
       enable: true,
       opacity: 0.5,
@@ -102,7 +103,6 @@ class App extends Component {
       input: "",
       imageUrl: "",
       box: [],
-      route: "/",
       isSignedIn: false,
       user: {
         id: "",
@@ -187,15 +187,12 @@ class App extends Component {
         console.log("This is an api error", error);
       });
   };
-  onRouteChange = (route) => {
-    if (route === "signout") {
-      this.setState({ isSignedIn: false });
-    } else if (route === "home") {
-      this.setState({ isSignedIn: true });
-    }
-    this.setState({ route: route });
+  setSignIn = () => {
+    this.setState({ isSignedIn: true });
   };
-
+  setSignOut = () => {
+    this.setState({ isSignedIn: false });
+  };
   render() {
     return (
       <div className="App">
@@ -206,7 +203,7 @@ class App extends Component {
         />
         <Navigation
           isSignedIn={this.state.isSignedIn}
-          onRouteChange={this.onRouteChange}
+          setSignOut={this.setSignOut}
         />
         <Switch>
           <Route path="/home">
@@ -226,17 +223,11 @@ class App extends Component {
           </Route>
 
           <Route exact path="/">
-            <SignIn
-              loadUser={this.loadUser}
-              onRouteChange={this.onRouteChange}
-            />
+            <SignIn loadUser={this.loadUser} setSignIn={this.setSignIn} />
           </Route>
 
           <Route path="/register">
-            <Register
-              loadUser={this.loadUser}
-              onRouteChange={this.onRouteChange}
-            />
+            <Register loadUser={this.loadUser} setSignIn={this.setSignIn} />
           </Route>
 
           <Route component={InvalidPath} />
