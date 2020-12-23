@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Navigation from "./Components/Navigation/Navigation";
-import Clarifai from "clarifai";
 import Logo from "./Components/Logo/Logo";
 import ImageLinkForm from "./Components/ImageLinkForm/ImageLinkForm";
 import Rank from "./Components/Rank/Rank";
@@ -12,10 +11,6 @@ import InvalidPath from "./Components/InvalidPath/InvalidPath";
 import "./App.css";
 import { Route, Switch } from "react-router-dom";
 import PrivateRoute from "./Components/Routes/PrivateRoute";
-
-const app = new Clarifai.App({
-  apiKey: "80f4141be0554cd19497116e8d784e83",
-});
 
 const particlesOptions = {
   background: {
@@ -96,23 +91,24 @@ const particlesOptions = {
   detectRetina: true,
 };
 
+const initialState = {
+  input: "",
+  imageUrl: "",
+  box: [],
+  isSignedIn: false,
+  user: {
+    id: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    entries: 0,
+    joined: "",
+  },
+};
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      input: "",
-      imageUrl: "",
-      box: [],
-      isSignedIn: false,
-      user: {
-        id: "",
-        firstName: "",
-        lastName: "",
-        email: "",
-        entries: 0,
-        joined: "",
-      },
-    };
+    this.state = initialState;
   }
 
   loadUser = (data) => {
@@ -164,9 +160,14 @@ class App extends Component {
   };
   onButtonSubmit = () => {
     this.setState({ imageUrl: this.state.input });
-
-    app.models
-      .predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
+    fetch("http://localhost:5000/imageurl", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        input: this.state.input,
+      }),
+    })
+      .then((response) => response.json())
       .then((response) => {
         if (response) {
           fetch("http://localhost:5000/image", {
@@ -179,7 +180,8 @@ class App extends Component {
             .then((response) => response.json())
             .then((count) => {
               this.setState(Object.assign(this.state.user, { entries: count }));
-            });
+            })
+            .catch(console.log);
         }
         this.displayFaceBox(this.calculateFaceLocation(response));
       })
@@ -193,6 +195,9 @@ class App extends Component {
   setSignOut = () => {
     this.setState({ isSignedIn: false });
   };
+  setInitialState = () => {
+    this.setState(initialState);
+  };
   render() {
     return (
       <div className="App">
@@ -204,6 +209,7 @@ class App extends Component {
         <Navigation
           isSignedIn={this.state.isSignedIn}
           setSignOut={this.setSignOut}
+          setInitialState={this.setInitialState}
         />
         <Switch>
           <Route path="/home">

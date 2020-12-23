@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Navigation = ({ setSignOut, isSignedIn }) => {
+const Navigation = ({ setSignOut, isSignedIn, setInitialState }) => {
   const classes = useStyles();
 
   return (
@@ -34,7 +34,7 @@ const Navigation = ({ setSignOut, isSignedIn }) => {
               component={Link}
               to={"/"}
               className={classes.navButton}
-              onClick={setSignOut}
+              onClick={(setSignOut, setInitialState)}
             >
               Sign Out
             </Button>

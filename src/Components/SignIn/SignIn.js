@@ -105,7 +105,7 @@ const SignIn = ({ history, loadUser, setSignIn }) => {
             >
               Sign In
             </Typography>
-            <form className={classes.form} noValidate onSubmit={onSubmitSignin}>
+            <form className={classes.form} noValidate>
               <TextField
                 onChange={onEmailChange}
                 variant="outlined"
